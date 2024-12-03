@@ -1,0 +1,11 @@
+SELECT week AS date, 
+       (SELECT SUM(score)
+        FROM top_rising_terms AS subquery
+        WHERE subquery.term = 'football'
+        AND subquery.week = main.week) AS total_popularity,
+       MIN(rank) AS best_rank
+FROM top_rising_terms AS main
+WHERE term = 'football'
+AND week BETWEEN '2024-01-01' AND '2024-01-31'
+GROUP BY week
+ORDER BY week ASC;
