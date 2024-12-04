@@ -1,5 +1,10 @@
-SELECT term, score, week, dma_name
-FROM top_rising_terms
-WHERE dma_name LIKE '%Nashville%'
-AND week BETWEEN '2024-01-01' AND '2024-01-31'
-ORDER BY LENGTH(term), score DESC, term ASC;
+SELECT DISTINCT term, score, week, dma_name
+FROM (
+    SELECT term, score, week, dma_name
+    FROM `bigquery-public-data.google_trends.top_terms`
+    WHERE dma_name LIKE "%Nashville%"
+) AS filtered_data
+WHERE week BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY) AND CURRENT_DATE()
+ORDER BY LENGTH(term) DESC, score DESC, term ASC
+LIMIT 100;
+#Unoptimized Location and Time-Based Query
