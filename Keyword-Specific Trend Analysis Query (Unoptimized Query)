@@ -1,11 +1,13 @@
-SELECT week AS date, 
-       (SELECT SUM(score)
-        FROM top_rising_terms AS subquery
-        WHERE subquery.term = 'football'
-        AND subquery.week = main.week) AS total_popularity,
-       MIN(rank) AS best_rank
-FROM top_rising_terms AS main
-WHERE term = 'football'
-AND week BETWEEN '2024-01-01' AND '2024-01-31'
-GROUP BY week
-ORDER BY week ASC;
+SELECT week AS date, dma_name, term,
+  (SELECT SUM(score)
+   FROM `bigquery-public-data.google_trends.top_terms` AS subquery
+   WHERE LOWER(subquery.term) LIKE '%football%'
+     AND subquery.week = main.week
+     AND subquery.dma_name = main.dma_name
+     AND subquery.term = main.term) AS total_popularity,
+  MIN(rank) AS best_rank
+FROM `bigquery-public-data.google_trends.top_terms` AS main
+WHERE LOWER(term) LIKE '%football%'
+GROUP BY week, dma_name, term
+ORDER BY week ASC, best_rank ASC;
+#Unoptimized Keyword Specific Trend Analysis
