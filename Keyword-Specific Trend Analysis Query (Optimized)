@@ -1,8 +1,6 @@
-SELECT week AS date, 
-       SUM(score) AS total_popularity,
-       MIN(rank) AS best_rank
-FROM top_rising_terms
-WHERE term = 'football'
-AND week BETWEEN '2024-01-01' AND '2024-01-31'
-GROUP BY week
-ORDER BY week ASC;
+SELECT week AS date, dma_name, term, SUM(score) AS total_popularity, MIN(rank) AS best_rank
+FROM `bigquery-public-data.google_trends.top_terms`
+WHERE LOWER(term) LIKE '%football%'
+GROUP BY week, dma_name, term
+ORDER BY week ASC, best_rank ASC;
+#Optimized Keyword Specific Trend Analysis
