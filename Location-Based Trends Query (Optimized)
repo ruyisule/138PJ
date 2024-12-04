@@ -1,5 +1,7 @@
 SELECT term, score, week, dma_name
-FROM top_rising_terms
-WHERE dma_name = 'Nashville TN'
-AND week BETWEEN '2024-01-01' AND '2024-01-31'
-ORDER BY score DESC, term ASC;
+FROM `bigquery-public-data.google_trends.top_terms`
+WHERE dma_name = "Nashville TN"
+  AND week BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY) AND CURRENT_DATE()
+ORDER BY score DESC, term ASC
+LIMIT 100;
+#Optimized Query 1: Location and Time
